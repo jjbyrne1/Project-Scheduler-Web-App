@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Main Page</title>
+
+        <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+        <!-- Fengyuan Chen's Datepicker -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="wrapperDiv">
+            <table style="float: left"
+                   name="teamInformationTable"
+                   border="1px solid black"
+                   border-collapse="collapse">
+                <caption>
+                    <b>Team Information Table</b>
+                </caption>
+                  <tr>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Name</th>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Advisor</th>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Topic</th>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Requirements Presentation</th>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Design Presentation</th>
+                      <th scope="col" style="padding-left: 40px;padding-right: 40px">Final Presentation</th>
+                  </tr>
+                  <tr>
+                      <td style="text-align: left;padding-left: 20px;padding-right: 20px">
+                          <div> Byrne, Jason </div>
+                      </td>
+                      <td style="text-align: center;padding-left: 20px;padding-right: 20px">
+                          <lablel>Mitch Nielsen</lablel><!-- <input type="text" id="advisorList" name="advisorList" /> -->
+                      </td>
+                      <td style="text-align: center;padding-left: 20px;padding-right: 20px">
+                          <div contenteditable> Project Scheduler Web App </div>
+                      </td>
+                      <td style="text-align: center;padding-left: 20px;padding-right: 20px"
+                          bgcolor="lightgreen">
+                          <input id="datepicker1"
+                                 style="text-align: center;width: 60px">
+                          <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                              <script>
+                                $(function () {
+                                  $("#datepicker1").datepicker();
+                                });
+                              </script>
+                      </td>
+                      <td style="text-align: center;padding-left: 20px;padding-right: 20px"
+                          bgcolor="white">
+                          <input id="datepicker2"
+                                 style="text-align: center;width: 70px">
+                          <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                              <script>
+                                $(function () {
+                                  $("#datepicker2").datepicker();
+                                });
+                              </script>
+                      </td>
+                      <td style="text-align: center;padding-left: 20px;padding-right: 20px"
+                          bgcolor="white">
+                          <input id="datepicker3"
+                                 style="text-align: center;width: 80px">
+                          <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                              <script>
+                                $(function () {
+                                  $("#datepicker3").datepicker();
+                                });
+                              </script>
+                  </tr>
+            </table>
+
+            <div.fixed class="container" style="position: absolute; float:left; top: 20px; padding-left: 15px">
+                <form method="POST" style="border: 1px solid black">
+                    <fieldset style="border: 1px">
+                        <legend style="text-align: center">Update Team Information</legend>
+                            <div style="text-align: left;padding-left: 5px;">
+                                <label style="padding-right: 8px">Name:</label>
+                                <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
+                                <!-- <textarea contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"> Jason Byrne </textarea> -->
+                            </div>
+                            <div style="text-align: left; padding-top: 5px">
+                                <label>Advisor:</label>
+                                 <select name="advisorList" onChange="combo(this, 'advisorList')" onfocusout="Post">
+                                        <option>Mitch Nielsen</option>
+                                        <option>Josh Weese</option>
+                                        <option selected="selected">Torben Amtoft</option>
+                                 </select>
+                            </div>
+                            <div style="text-align: left; padding-left: 5px; padding-top: 5px">
+                                <label style="padding-right: 10px">Topic:</label>
+                                <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
+                            </div>
+
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div style="text-align: center;padding-top: 10px;font-size: medium">
+                                <button type="submit" class="btn btn-primary" style="alignment: center">Submit</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div.fixed>
+        </div>
+    </body>
+</html>
