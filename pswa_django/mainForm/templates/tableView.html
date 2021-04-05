@@ -73,37 +73,6 @@
                               </script>
                   </tr>
             </table>
-
-            <div.fixed class="container" style="position: absolute; float:left; top: 20px; padding-left: 15px">
-                <form method="POST" style="border: 1px solid black">
-                    <fieldset style="border: 1px">
-                        <legend style="text-align: center">Update Team Information</legend>
-                            <div style="text-align: left;padding-left: 5px;">
-                                <label style="padding-right: 8px">Name:</label>
-                                <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
-                                <!-- <textarea contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"> Jason Byrne </textarea> -->
-                            </div>
-                            <div style="text-align: left; padding-top: 5px">
-                                <label>Advisor:</label>
-                                 <select name="advisorList" onChange="combo(this, 'advisorList')" onfocusout="Post">
-                                        <option>Mitch Nielsen</option>
-                                        <option>Josh Weese</option>
-                                        <option selected="selected">Torben Amtoft</option>
-                                 </select>
-                            </div>
-                            <div style="text-align: left; padding-left: 5px; padding-top: 5px">
-                                <label style="padding-right: 10px">Topic:</label>
-                                <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
-                            </div>
-
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div style="text-align: center;padding-top: 10px;font-size: medium">
-                                <button type="submit" class="btn btn-primary" style="alignment: center">Submit</button>
-                        </div>
-                    </fieldset>
-                </form>
-            </div.fixed>
         </div>
     </body>
 </html>

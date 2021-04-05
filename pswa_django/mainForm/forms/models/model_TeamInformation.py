@@ -6,4 +6,5 @@ class TeamInformation(models.Model):
     teamId = models.IntegerField(primary_key=True, unique=True, default=1)
     numberOfTeamMembers = models.IntegerField()
     advisorId = models.ForeignKey(Advisor, on_delete=models.CASCADE)
-    topic = models.CharField(max_length = 50)
+    topic = models.CharField(max_length=50)
+    githubRepoLink = models.CharField(max_length=100, null=True)
