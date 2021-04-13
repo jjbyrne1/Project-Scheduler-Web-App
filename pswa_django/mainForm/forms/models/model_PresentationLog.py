@@ -1,13 +1,12 @@
 from django.db import models
-from .model_TeamInformation import TeamInformation
 
 
 class PresentationLog(models.Model):
-    teamId = models.OneToOneField(TeamInformation, verbose_name='TeamID', primary_key=True, on_delete=models.CASCADE)
-    requirementsPresentation_Date = models.DateField(null=True)
-    requirementsPresentation_Completed = models.BooleanField(default=False)
-    designPresentation_Date = models.DateField(null=True)
-    designPresentation_Completed = models.BooleanField(default=False)
+    LogId = models.AutoField(auto_created=True, primary_key=True, serialize=False)
+    RequirementsPresentation_Date = models.DateField(null=True)
+    RequirementsPresentation_Completed = models.BooleanField(default=False)
+    DesignPresentation_Date = models.DateField(null=True)
+    DesignPresentation_Completed = models.BooleanField(default=False)
     FinalPresentation_Date = models.DateField(null=True)
     FinalPresentation_Completed = models.BooleanField(default=False)
 

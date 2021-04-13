@@ -4,9 +4,10 @@ from .model_TeamInformation import TeamInformation
 
 # Create your models here.
 class User(models.Model):
-    name = models.CharField(max_length=50, null=True, blank=False)
-    eid = models.CharField(max_length=50, null=True, blank=False)
-    password = models.CharField(max_length=50, null=True, blank=False)
-    email = models.EmailField(max_length=60)
-    teamID = models.ForeignKey(TeamInformation, on_delete=models.CASCADE)
+    Name = models.CharField(max_length=50, null=True, blank=False)
+    Eid = models.CharField(max_length=50, null=True, blank=True)
+    Password = models.CharField(max_length=50, null=True, blank=True)
+    Email = models.EmailField(max_length=60, blank=True)
+    #teamID = TeamInformation.objects.raw('SELECT "teamId" FROM model_TeamInformation WHERE "NumberofTeamMembers" = 0 GROUP BY TI."TeamID", "NumberofTeamMembers" LIMIT 1;')
+    TeamId = models.ForeignKey(TeamInformation, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=False)
