@@ -9,7 +9,7 @@ class User(models.Model):
     Eid = models.CharField(max_length=50, null=True, blank=True)
     Password = models.CharField(max_length=50, null=True, blank=True)
     Email = models.EmailField(max_length=60, blank=True)
-    TeamId = models.OneToOneField(TeamInformation, on_delete=models.CASCADE, primary_key=True) #default=TeamInformation.get_new, verbose_name="TeamId")
+    TeamId = models.ForeignKey(TeamInformation, on_delete=models.CASCADE, primary_key=True, unique=True, default=TeamInformation.get_new, verbose_name="TeamId")
     is_admin = models.BooleanField(default=False)
 
     @property
