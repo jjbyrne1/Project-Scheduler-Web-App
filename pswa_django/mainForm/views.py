@@ -1,21 +1,28 @@
-from .forms import MyForm, UpdateTeamInformationForm
 from django.shortcuts import render
 from django import forms
-from .forms.models import User, TeamInformation, PresentationLog
+from .models import User, PresentationLog, Advisor#, TeamInformation
 
 
 def showtable(request):
     if request.method == "POST":
-        form = UpdateTeamInformationForm.UpdateTeamInformationForm(request.POST)
-        if form.is_valid():
+        form = forms.Form
+        if form.is_valid:
             form.save()
+        return render(request, 'tableView.html', {'form1': form})
     else:
-        form = UpdateTeamInformationForm.UpdateTeamInformationForm()
-    return render(request, 'tableView.html', {'form1': form})
-    #return render(request, 'tableView.html')
+        form = forms.Form
+        advisor_list = Advisor.objects.all()
+        user_list = User.objects.all()
+        #user = user_list.get(TeamId__user=1)
+        #teaminfo_list = TeamInformation.objects.all()
+        presentationlog_list = PresentationLog.objects.all()
+        return render(request, 'tableView.html', {'form1': form, 'advisor_list': advisor_list, 'user_list': user_list,
+                                                  #'teaminfo_list': teaminfo_list,
+                                                  'presentationlog_list': presentationlog_list})
 
 
 class DateForm(forms.Form):
+    #presentationinfo = PresentationLog.objects.all()
     date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 
 
@@ -26,23 +33,3 @@ def adduser(request, Name: str, Eid: str, Email: str):
     ti.save()
     pl.save()
     u.save()
-
-
-def my_form(request):
-    if request.method == "POST":
-        form = MyForm.MyForm(request.POST)
-        if form.is_valid():
-            form.save()
-    else:
-        form = MyForm.MyForm()
-    return render(request, 'cv-form.html', {'form': form})
-
-
-def my_form2(request):
-    if request.method == "POST":
-        form = UpdateTeamInformationForm.UpdateTeamInformationForm(request.POST)
-        if form.is_valid():
-            form.save()
-    else:
-        form = UpdateTeamInformationForm.UpdateTeamInformationForm()
-    return render(request, 'tableView.html', {'form1': form})
