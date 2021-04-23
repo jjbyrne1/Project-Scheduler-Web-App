@@ -16,7 +16,7 @@ class PresentationLog(models.Model):
 
     @classmethod
     def get_new(cls):
-        return cls.objects.create().TeamId
+        return cls.objects.create()
 
     def __str__(self):
         return "LogID: " + str(self.TeamId)

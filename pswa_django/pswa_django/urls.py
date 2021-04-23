@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Enter the app name in following
     # syntax for this to work
-    path('', include("mainForm.urls"))
+    path('', include("mainForm.urls")),
+    path('table/', include("mainForm.urls")),
+    path('info/', include("mainForm.urls"))
 ]
