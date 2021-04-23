@@ -1,10 +1,78 @@
 <div class="container">
-    <form method="POST">
-      <fieldset>
-        <legend>Form</legend>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </fieldset>
-    </form>
+     <div.fixed class="container" style="position: absolute; float:left; top: 20px; padding-left: 15px">
+         <form method="POST" style="border: 1px solid black" >
+            <fieldset style="border: 1px">
+            <legend style="text-align: center">Edit Team Information</legend>
+            <div style="padding-top: 5px;">
+                <label style="padding-right: 8px">Name:</label>
+                <input contenteditable="true" style="border: 1px solid black; height: 20px; min-width: 100px; width: 100px; alignment: right"/>
+                <!-- <textarea contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"> Jason Byrne </textarea> -->
+            </div>
+            <div style="padding-top: 5px">
+                <label style="text-align: left; padding-right: 20px">EID:</label>
+                <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
+            </div>
+
+                <input id="datepicker1"
+                       style="text-align: center;width: 80px">
+                <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                <script>
+                    $(function () {
+                        $("#datepicker1").datepicker();
+                    });
+                </script>
+                <td style="text-align: center;padding-left: 20px;padding-right: 20px"
+                bgcolor="lightgreen">
+                <input id="datepicker2"
+                       style="text-align: center;width: 80px">
+                <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                <script>
+                    $(function () {
+                        $("#datepicker2").datepicker();
+                    });
+                </script>
+            </td>
+            <td style="text-align: center;padding-left: 20px;padding-right: 20px"
+                bgcolor="white">
+                <input id="datepicker3"
+                       style="text-align: center;width: 80px">
+                <!-- Fengyuan Chen’s Datepicker from https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html -->
+                <script>
+                    $(function () {
+                        $("#datepicker3").datepicker();
+                    });
+                </script>
+            </td>
+                <!--
+                <div style="padding-top: 5px">
+                    <label style="text-align: left; padding-right: 8px">Email:</label>
+                    <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px"/>
+                </div>
+
+                <div style="text-align: left; padding-top: 5px">
+                    <label>Advisor:</label>
+                     <select name="advisorList" onChange="combo(this, 'advisorList')" onfocusout="Post">
+                            <option>Mitch Nielsen</option>
+                            <option>Josh Weese</option>
+                            <option selected="selected">Torben Amtoft</option>
+                     </select>
+                </div>
+                <div style="text-align: left; padding-left: 5px; padding-top: 5px">
+                    <label style="padding-right: 10px">Topic:</label>
+                    <input contenteditable="true" style="border: 1px solid black; min-width: 100px; width: 100px;"/>
+                </div> --->
+
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div style="text-align: center;padding-top: 10px;font-size: medium">
+                        <button class="btn btn-success"
+                                onclick="location.href='table/';"
+                                style="text-align: center;"
+                        type="submit">
+                            Submit
+                        </button>
+                </div>
+            </fieldset>
+        </form>
+    </div.fixed>
 </div>
