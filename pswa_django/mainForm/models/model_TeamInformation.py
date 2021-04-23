@@ -5,7 +5,7 @@ from .model_PresentationLog import PresentationLog
 
 class TeamInformation(models.Model):
     #TeamId = models.OneToOneField(PresentationLog, on_delete=models.CASCADE,  primary_key=True)
-    TeamId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE, primary_key=True, serialize=False, default=PresentationLog.get_new)
+    TeamId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE, primary_key=True, serialize=False)
     #TeamId = models.OneToOneField(PresentationLog, on_delete=models.CASCADE, primary_key=True, default=PresentationLog.get_new)
     #TeamId = models.OneToOneField(PresentationLog, primary_key=True, on_delete=models.CASCADE, default=PresentationLog.get_new)
     #TeamId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE, primary_key=True, unique=True) #default=PresentationLog.get_new,)
