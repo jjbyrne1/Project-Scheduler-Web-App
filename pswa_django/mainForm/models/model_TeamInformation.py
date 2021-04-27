@@ -1,7 +1,7 @@
 from django.db import models
 from .model_Advisor import Advisor
 from .model_PresentationLog import PresentationLog
-
+from .model_User import User
 
 class TeamInformation(models.Model):
     #TeamId = models.OneToOneField(PresentationLog, on_delete=models.CASCADE,  primary_key=True)
@@ -9,7 +9,8 @@ class TeamInformation(models.Model):
     #TeamId = models.OneToOneField(PresentationLog, on_delete=models.CASCADE, primary_key=True, default=PresentationLog.get_new)
     #TeamId = models.OneToOneField(PresentationLog, primary_key=True, on_delete=models.CASCADE, default=PresentationLog.get_new)
     #TeamId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE, primary_key=True, unique=True) #default=PresentationLog.get_new,)
-    NumberOfTeamMembers = models.IntegerField(default=1)
+    #users = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
+    users = models.ManyToManyField(to=User)
     AdvisorId = models.ForeignKey(Advisor, on_delete=models.CASCADE, null=True, blank=True)
     Topic = models.CharField(max_length=50, null=False, blank=False, default="N/A")
     #LogId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE)
@@ -24,9 +25,18 @@ class TeamInformation(models.Model):
     def teamid(self):
         return self.TeamId_id
 
-    @classmethod
-    def get_new(cls):
-        return cls.objects.create().TeamId
+    @property
+    def listOfTeamMembers(self):
+        string = ""
+        b = True
+        userQuarrySet = TeamInformation.objects.get(TeamId=self.TeamId)
+        for user in userQuarrySet.users.all():
+            if b:
+                string = string + str(user)
+                b = False
+            else:
+                string = string + "; " + str(user)
+        return string
 
     def __str__(self):
-        return "Team: " + str(self.TeamId) #+ self.get_Topic
+        return "Team: " + str(self.teamid) + "| Team Members: " + self.listOfTeamMembers
