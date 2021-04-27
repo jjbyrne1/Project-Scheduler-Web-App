@@ -4,8 +4,7 @@ from .model_TeamInformation import TeamInformation
 
 # Create your models here.
 class User(models.Model):
-    FirstName = models.CharField(max_length=50, null=False, blank=False, unique=True)
-    LastName = models.CharField(max_length=50, null=False, blank=False, unique=True)
+    FullName = models.CharField(max_length=50, null=False, blank=False, unique=True)
     Eid = models.CharField(max_length=50, null=True, blank=True)
     Password = models.CharField(max_length=50, null=True, blank=True)
     Email = models.EmailField(max_length=60, blank=True)
@@ -16,5 +15,19 @@ class User(models.Model):
     def teamid(self):
         return self.TeamId_id
 
+    @property
+    def fullname(self):
+        return str(self.FullName)
+
+    @property
+    def firstname(self):
+        fields = self.fullname.split(' ')
+        return fields[0]
+
+    @property
+    def lastname(self):
+        fields = self.fullname.split(' ')
+        return fields[1]
+
     def __str__(self):
-        return self.LastName + ", " + self.FirstName
+        return self.lastname + ", " + self.firstname
