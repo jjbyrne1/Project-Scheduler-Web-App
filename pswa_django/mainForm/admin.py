@@ -41,9 +41,9 @@ class UserAdmin(admin.ModelAdmin):
         # GithubRepoLink='')
         teaminfo.save()
 
-        teamId = TeamInformation.objects.get(TeamId=teaminfo.TeamId)
+        #teamId = TeamInformation.objects.get(TeamId=teaminfo.TeamId)
         # Create User objects from passed in data
-        user = User(TeamId=teamId,
+        user = User(#TeamId=teamId,
                     FullName=firstname + " " + lastname,
                     is_admin=False)
         # Eid='',
@@ -61,18 +61,25 @@ class UserAdmin(admin.ModelAdmin):
             lines = file_data.split('\n')
 
             repeated_lines = 0
+            header_line = True
             for line in lines:
+                # Split fields in file by comma
                 fields = line.split(',')
-                try:
-                    if User.objects.get(FullName=fields[1] + " " + fields[0]):
-                        repeated_lines += 1
-                    else:
+                # If header line don't include it
+                if header_line:
+                    header_line = False
+                else:
+                    try:
+                        # Check if object already exists
+                        if User.objects.get(FullName=fields[1] + " " + fields[0]):
+                            repeated_lines += 1
+                        else:
+                            self.addStudent(fields[1], fields[0])
+                    # User has no objects so add everything
+                    except ObjectDoesNotExist:
                         self.addStudent(fields[1], fields[0])
-
-                except ObjectDoesNotExist:
-                    self.addStudent(fields[1],fields[0])
-                    #self.message_user(request, "Your csv file has not been imported. Repeated names were detected")
-                    #return redirect("..")
+                        #self.message_user(request, "Your csv file has not been imported. Repeated names were detected")
+                        #return redirect("..")
             if repeated_lines > 0:
                 self.message_user(request, "Your csv file has been imported. " + str(repeated_lines) +
                                   " repeats were detected and not added.")
@@ -106,14 +113,36 @@ class AdvisorAdmin(admin.ModelAdmin):
             file_data = csv_file.read().decode('utf-8')
             # Split lines in file by new line character
             lines = file_data.split('\n')
+
+            repeated_lines = 0
+            header_line = True
             for line in lines:
                 # Split fields in file by comma
                 fields = line.split(',')
-                # Create Advisor objects from passed in data
-                advisor = Advisor(Name=fields[1] + " " + fields[0])
-                advisor.save()
-            self.message_user(request, "Your csv file has been imported")
-            return redirect("..")
+                # If header line don't include it
+                if header_line:
+                    header_line = False
+                else:
+                    try:
+                        # Check if object already exists
+                        if Advisor.objects.get(Name=fields[1] + " " + fields[0]):
+                            repeated_lines += 1
+                        else:
+                            # Create Advisor objects from passed in data
+                            advisor = Advisor(Name=fields[1] + " " + fields[0])
+                            advisor.save()
+                    # Advisor has no objects so add everything
+                    except ObjectDoesNotExist:
+                        # Create Advisor objects from passed in data
+                        advisor = Advisor(Name=fields[1] + " " + fields[0])
+                        advisor.save()
+            if repeated_lines > 0:
+                self.message_user(request, "Your csv file has been imported. " + str(repeated_lines) +
+                                  " repeats were detected and not added.")
+                return redirect("..")
+            else:
+                self.message_user(request, "Your csv file has been imported")
+                return redirect("..")
         form = CsvImportForm()
         payload = {"form": form}
         return render(
