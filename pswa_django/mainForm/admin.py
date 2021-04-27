@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from .models import User, PresentationLog, Advisor, TeamInformation
+from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 # Register your models here.
 admin.site.register(TeamInformation)
@@ -26,6 +28,30 @@ class UserAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def addStudent(self, firstname: str, lastname: str):
+        log = PresentationLog()
+        log.save()
+
+        logId = PresentationLog.objects.get(TeamId=log.TeamId)
+        # Create TeamInformation object for User's TeamId
+        teaminfo = TeamInformation(TeamId=logId)
+        # NumberOfTeamMembers=1,
+        # AdvisorId='',
+        # Topic='',
+        # GithubRepoLink='')
+        teaminfo.save()
+
+        teamId = TeamInformation.objects.get(TeamId=teaminfo.TeamId)
+        # Create User objects from passed in data
+        user = User(TeamId=teamId,
+                    FullName=firstname + " " + lastname,
+                    is_admin=False)
+        # Eid='',
+        # Password='',
+        # Email='',
+
+        user.save()
+
     def import_csv_user(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
@@ -33,28 +59,27 @@ class UserAdmin(admin.ModelAdmin):
             # Credit to https://stackoverflow.com/questions/62912039/uploading-csv-file-django-using-a-form
             file_data = csv_file.read().decode('utf-8')
             lines = file_data.split('\n')
+
+            repeated_lines = 0
             for line in lines:
                 fields = line.split(',')
-                if fields.count == 2:
-                    # Create PresentationLog object for TeamInformation's LogId
-                    log = PresentationLog()
-                    log.save()
-                    # Create TeamInformation object for User's TeamId
-                    teaminfo = TeamInformation(TeamId=log.TeamId)
-                                               #NumberOfTeamMembers=1,
-                                               #AdvisorId='',
-                                               #Topic='',
-                                               #GithubRepoLink='')
-                    teaminfo.save()
-                    # Create User objects from passed in data
-                    user = User(TeamId=teaminfo.TeamId, FirstName=fields[1], LastName=fields[0], is_admin=False)
-                                #Eid='',
-                                #Password='',
-                                #Email='',
+                try:
+                    if User.objects.get(FullName=fields[1] + " " + fields[0]):
+                        repeated_lines += 1
+                    else:
+                        self.addStudent(fields[1], fields[0])
 
-                    user.save()
-            self.message_user(request, "Your csv file has been imported")
-            return redirect("..")
+                except ObjectDoesNotExist:
+                    self.addStudent(fields[1],fields[0])
+                    #self.message_user(request, "Your csv file has not been imported. Repeated names were detected")
+                    #return redirect("..")
+            if repeated_lines > 0:
+                self.message_user(request, "Your csv file has been imported. " + str(repeated_lines) +
+                                  " repeats were detected and not added.")
+                return redirect("..")
+            else:
+                self.message_user(request, "Your csv file has been imported")
+                return redirect("..")
         form = CsvImportForm()
         payload = {"form": form}
         return render(
