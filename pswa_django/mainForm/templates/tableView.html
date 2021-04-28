@@ -22,88 +22,101 @@
                     <b style="font-family: Algerian; font-size: 40px">Team Information Table</b>
                 </caption>
                 <tr style="font-size: 25px">
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Team Members</th>
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Advisor</th>
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Topic</th>
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Requirements Presentation</th>
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Design Presentation</th>
-                      <th scope="col" style="padding-left: 20px;padding-right: 20px">Final Presentation</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Team Number</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Advisor</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Topic</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Requirements Presentation</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Design Presentation</th>
+                    <th scope="col" style="padding-left: 20px;padding-right: 20px">Final Presentation</th>
                 </tr>
                 {% for teaminfo in teaminfo_list %}
-                    <td>
-                        <div style="padding-top: 5px; padding-bottom: 5px; padding-left: 10px; padding-right: 10px">
-                            {% for user in user_list %}
-                                 {% if teaminfo.TeamId_id == user.TeamId_id %}
-                                     <input type="text" name="a" id="a" value="{{ user }}" style="text-align: left;border: white"/> <br/>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </td>
-                    <td>
-                        <div style="padding-top: 5px; padding-bottom: 5px; padding-left: 10px; padding-right: 10px">
-                            <select>
-                                {% for advisor in advisor_list %}
-                                    {% for user in user_list %}
-                                        {% if teaminfo.teamid == user.teamid %}
+                    {% if teaminfo.users.all %}
+                        <tr>
+                            <td>
+                                <div style="padding-top: 5px; padding-bottom: 5px; padding-left: 10px; padding-right: 10px">
+                                    {% for user in teaminfo.users.all %}
+                                        {{ user }}
+                                        <br/>
+                                    {% endfor %}
+                                         <!-- <input type="text" name="a" id="a" value="{{ teaminfo.users.all }}" style="text-align: left;border: white"/> <br/> -->
+                                </div>
+                            </td>
+                            <td>
+                                <div style="padding-top: 5px; padding-bottom: 5px; padding-left: 10px; padding-right: 10px">
+                                    {% if teaminfo.advisorid == NULL %}
+                                    <label style="color:red">Not Yet Chosen</label>
+                                    {% endif%}
+                                    {% for advisor in advisor_list %}
+                                        {% if teaminfo.advisorid == advisor.advisorid %}
+                                            <label>{{ advisor.Name }}</label>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <!--<select>
+                                        {% for advisor in advisor_list %}
                                             {% if teaminfo.advisorid == advisor.advisorid %}
                                                 <option selected="selected" style="padding-left: 20px;padding-right: 20px"> {{ advisor.Name }} </option>
                                             {% else %}
                                                 <option style="padding-left: 20px;padding-right: 20px"> {{ advisor.Name }} </option>
                                             {% endif %}
+                                         {% endfor %}
+                                    </select>-->
+                                </div>
+                            </td>
+                            <td style="text-align: center;padding-left: 20px;padding-right: 20px">
+                                {% if teaminfo.topic == "?" %}
+                                    <label style="color:red">Not Yet Chosen</label>
+                                {% else %}
+                                    <label> {{ teaminfo.Topic }} </label>
+                                {% endif%}
+
+                                <!-- <input name="topic" id="topic" onchange="ChangeTeamTopic(document.getElementById('topic'))" value='{{ teaminfo.Topic }}'/> -->
+                            </td>
+                                {% for presentationlog in presentationlog_list %}
+                                    {% if teaminfo.teamid == presentationlog.logid %}
+                                        {% if presentationlog.RequirementsPresentation_Completed == True %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
+                                                <!-- <input type="checkbox" onchange="this.refresh();" checked="checked"> -->
+                                                {{ presentationlog.RequirementsPresentation_Date }}
+                                            </td>
+                                        {% elif presentationlog.RequirementsPresentation_Completed == False %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
+                                                 <!-- <input type="checkbox" onchange="this.refresh();"> -->
+                                                {{ presentationlog.RequirementsPresentation_Date }}
+                                            </td>
                                         {% endif %}
-                                    {% endfor %}
+                                        {% if presentationlog.DesignPresentation_Completed == True %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
+                                                <!-- <input type="checkbox" onchange="this.refresh();" checked="checked">  -->
+                                                {{ presentationlog.DesignPresentation_Date }}
+                                            </td>
+                                        {% elif presentationlog.DesignPresentation_Completed == False %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
+                                                <!-- <input type="checkbox" onchange="this.refresh();">  -->
+                                                {{ presentationlog.DesignPresentation_Date }}
+                                            </td>
+                                        {% endif %}
+                                        {% if presentationlog.FinalPresentation_Completed == True %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
+                                                <!-- <input type="checkbox" onchange="this.refresh();" checked="checked">  -->
+                                                {{ presentationlog.FinalPresentation_Date }}
+                                            </td>
+                                        {% elif presentationlog.FinalPresentation_Completed == False %}
+                                            <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
+                                                <!-- <input type="checkbox" onchange="this.refresh();">  -->
+                                                {{ presentationlog.FinalPresentation_Date }}
+                                            </td>
+                                        {% endif %}
+                                    {% endif %}
                                 {% endfor %}
-                            </select>
-                        </div>
-                    </td>
-                    <td style="text-align: center;padding-left: 20px;padding-right: 20px">
-                        <input name="topic" id="topic" onchange="ChangeTeamTopic(document.getElementById('topic'))" value='{{ teaminfo.Topic }}'/>
-                    </td>
-                        {% for presentationlog in presentationlog_list %}
-                            {% if teaminfo.teamid == presentationlog.logid %}
-                                {% if presentationlog.RequirementsPresentation_Completed == True %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
-                                        <input type="checkbox" onchange="this.refresh();" checked="checked">
-                                        {{ presentationlog.RequirementsPresentation_Date }}
-                                    </td>
-                                {% elif presentationlog.RequirementsPresentation_Completed == False %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
-                                        <input type="checkbox" onchange="this.refresh();">
-                                        {{ presentationlog.RequirementsPresentation_Date }}
-                                    </td>
-                                {% endif %}
-                                {% if presentationlog.DesignPresentation_Completed == True %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
-                                        <input type="checkbox" onchange="this.refresh();" checked="checked">
-                                        {{ presentationlog.DesignPresentation_Date }}
-                                    </td>
-                                {% elif presentationlog.DesignPresentation_Completed == False %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
-                                        <input type="checkbox" onchange="this.refresh();">
-                                        {{ presentationlog.DesignPresentation_Date }}
-                                    </td>
-                                {% endif %}
-                                {% if presentationlog.FinalPresentation_Completed == True %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: lightgreen">
-                                        <input type="checkbox" onchange="this.refresh();" checked="checked">
-                                        {{ presentationlog.FinalPresentation_Date }}
-                                    </td>
-                                {% elif presentationlog.FinalPresentation_Completed == False %}
-                                    <td style="text-align: center;padding-left: 20px;padding-right: 20px; background-color: white">
-                                        <input type="checkbox" onchange="this.refresh();">
-                                        {{ presentationlog.FinalPresentation_Date }}
-                                    </td>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    <td style="text-align: center;padding: 10px">
-                        <button class="btn btn-success"
-                                onclick="location.href='/info/';"
-                                style="text-align: center;">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
+                            <td style="text-align: center;padding: 10px">
+                                <button class="btn btn-success"
+                                        onclick="location.href='/admin/mainForm/teaminformation/'"
+                                        style="text-align: center;">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </div>
