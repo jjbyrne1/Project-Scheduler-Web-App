@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from .models import User, PresentationLog, Advisor, TeamInformation
-from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 # Register your models here.
@@ -80,6 +79,13 @@ class UserAdmin(admin.ModelAdmin):
                         self.addStudent(fields[1], fields[0])
                         #self.message_user(request, "Your csv file has not been imported. Repeated names were detected")
                         #return redirect("..")
+                    except IndexError:
+                        self.message_user(request, "Your csv file had blank lines, remove them and try again.")
+                        form = CsvImportForm()
+                        payload = {"form": form}
+                        return render(
+                            request, "csv_form.html", payload
+                        )
             if repeated_lines > 0:
                 self.message_user(request, "Your csv file has been imported. " + str(repeated_lines) +
                                   " repeats were detected and not added.")
@@ -101,11 +107,11 @@ class AdvisorAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('import-csv-advisor/', self.import_admin_csv),
+            path('import-csv-advisor/', self.import_advisor_csv),
         ]
         return my_urls + urls
 
-    def import_admin_csv(self, request):
+    def import_advisor_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
 
@@ -116,9 +122,10 @@ class AdvisorAdmin(admin.ModelAdmin):
 
             repeated_lines = 0
             header_line = True
+            line_number = 1
             for line in lines:
                 # Split fields in file by comma
-                fields = line.split(',')
+                fields = line.split(",")
                 # If header line don't include it
                 if header_line:
                     header_line = False
@@ -129,13 +136,22 @@ class AdvisorAdmin(admin.ModelAdmin):
                             repeated_lines += 1
                         else:
                             # Create Advisor objects from passed in data
-                            advisor = Advisor(Name=fields[1] + " " + fields[0])
+                            advisor = Advisor.objects.create(Name=fields[1] + " " + fields[0])
                             advisor.save()
                     # Advisor has no objects so add everything
                     except ObjectDoesNotExist:
                         # Create Advisor objects from passed in data
-                        advisor = Advisor(Name=fields[1] + " " + fields[0])
+                        advisor = Advisor.objects.create(Name=fields[1] + " " + fields[0])
                         advisor.save()
+                    except IndexError:
+                        self.message_user(request, "Your csv file had a blank line at line " + str(line_number)
+                                          + ", remove it and try again.")
+                        form = CsvImportForm()
+                        payload = {"form": form}
+                        return render(
+                            request, "csv_form.html", payload
+                        )
+                line_number += 1
             if repeated_lines > 0:
                 self.message_user(request, "Your csv file has been imported. " + str(repeated_lines) +
                                   " repeats were detected and not added.")
