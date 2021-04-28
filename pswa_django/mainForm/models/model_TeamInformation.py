@@ -12,7 +12,7 @@ class TeamInformation(models.Model):
     #users = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
     users = models.ManyToManyField(to=User)
     AdvisorId = models.ForeignKey(Advisor, on_delete=models.CASCADE, null=True, blank=True)
-    Topic = models.CharField(max_length=50, null=False, blank=False, default="N/A")
+    Topic = models.CharField(max_length=50, null=False, blank=False, default="?")
     #LogId = models.ForeignKey(PresentationLog, on_delete=models.CASCADE)
     #LogId = models.OneToOneField(PresentationLog, on_delete=models.CASCADE, parent_link=True)
     GithubRepoLink = models.CharField(max_length=100, null=True, blank=True)
