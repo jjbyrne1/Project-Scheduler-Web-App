@@ -27,8 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ["localhost", "testserver", "127.0.0.1"]
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -39,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'import_export',
-    'mainForm',
+    'mainForm.apps.MainformConfig',
+
+    # for coverage table when testing
+    'django_nose',
+    'django_extensions',
+    'pydotplus',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pswa_django.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -127,4 +129,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+STATIC_ROOT = 'C:/Users/theby/Desktop/STATIC_ROOT_STUDENT_PORTAL'
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on all apps in the project
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=mainForm',
+]
