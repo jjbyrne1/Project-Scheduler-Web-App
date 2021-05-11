@@ -4,7 +4,6 @@ from .model_team_informations import TeamInformation
 
 # Presentation Log Model
 class PresentationLog(models.Model):
-    #TeamID = models.AutoField(auto_created=True, primary_key=True, serialize=False)
     TeamID = models.OneToOneField(to=TeamInformation, on_delete=models.CASCADE)
     RequirementsPresentation_Date = models.DateField(null=True, blank=True)
     RequirementsPresentation_Completed = models.BooleanField(default=False)

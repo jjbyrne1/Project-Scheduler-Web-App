@@ -233,7 +233,7 @@ class AdvisorAdmin(admin.ModelAdmin):
     change_list_template = "admin/advisors_changelist.html"
 
     # Sorts by a Advisors Name field when displaying objects in Advisor admin page
-    ordering = ('Name',)
+    ordering = ('FullName',)
 
     # Adds a new url to mainForm's urls.py that can direct the user to a form to import a csv file
     def get_urls(self):
@@ -267,16 +267,16 @@ class AdvisorAdmin(admin.ModelAdmin):
                 else:
                     try:
                         # Check if object already exists
-                        if Advisor.objects.get(Name=f"{fields[last_name_field]}, {fields[first_name_field]}"):
+                        if Advisor.objects.get(FullName=f"{fields[last_name_field]}, {fields[first_name_field]}"):
                             repeated_lines += 1
                         else:
                             # Create Advisor objects from passed in data
-                            advisor = Advisor.objects.create(Name=f"{fields[last_name_field]}, {fields[first_name_field]}")
+                            advisor = Advisor.objects.create(FullName=f"{fields[last_name_field]}, {fields[first_name_field]}")
                             advisor.save()
                     # Advisor has no objects so add everything
                     except ObjectDoesNotExist:
                         # Create Advisor objects from passed in data
-                        advisor = Advisor.objects.create(Name=f"{fields[last_name_field]}, {fields[first_name_field]}")
+                        advisor = Advisor.objects.create(FullName=f"{fields[last_name_field]}, {fields[first_name_field]}")
                         advisor.save()
                     except IndexError:
                         self.message_user(request, "Your csv file had a blank line at line " + str(line_number)

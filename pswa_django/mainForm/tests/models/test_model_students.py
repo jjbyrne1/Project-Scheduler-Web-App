@@ -9,4 +9,3 @@ class StudentTestCase(TestCase):
 
     def test_student_string_representation(self):
         self.assertEqual(str(self.student), self.name)
-

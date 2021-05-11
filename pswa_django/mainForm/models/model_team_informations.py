@@ -5,8 +5,8 @@ from .model_students import Student
 
 # TeamInformation Model
 class TeamInformation(models.Model):
-    TeamID = models.AutoField(auto_created=True, primary_key=True, serialize=False)
-    Students = models.ManyToManyField(Student, null=True)
+    TeamID = models.AutoField(primary_key=True, serialize=False)
+    Students = models.ManyToManyField(Student, null=True, blank=True)
     AdvisorID = models.ForeignKey(Advisor, on_delete=models.SET_NULL, null=True, blank=True)
     Topic = models.CharField(max_length=50, null=True, blank=True)
     Location = models.CharField(max_length=100, null=True, blank=True)

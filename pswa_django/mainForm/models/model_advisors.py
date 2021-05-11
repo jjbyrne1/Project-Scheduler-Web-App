@@ -3,7 +3,7 @@ from django.db import models
 
 # Advisor Model
 class Advisor(models.Model):
-    AdvisorID = models.AutoField(auto_created=True, primary_key=True, serialize=False)
+    AdvisorID = models.AutoField(primary_key=True, serialize=False)
     FullName = models.CharField(max_length=50, unique=True)
 
     @property

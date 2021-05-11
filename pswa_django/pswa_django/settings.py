@@ -11,11 +11,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from dotenv import load_dotenv, find_dotenv
-from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(find_dotenv(BASE_DIR + "/env/.env-studentportal"), verbose=True)
+load_dotenv(find_dotenv(BASE_DIR + "/env/.env-pswa"), verbose=True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.example.com']
 
 # Application definition
 
@@ -38,12 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # new
     'mainForm.apps.MainformConfig',
 
-    # for coverage table when testing
-    'django_nose',
-    'django_extensions',
-    'pydotplus',
+    # Used for testing
+
+    # pip install django-nose
+    # Link: https://pypi.org/project/django-nose/
+    # 'django_nose',
+
+    # pip install django-extensions
+    # Link: https://pypi.org/project/django-extensions/
+    #'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = 'C:/Users/theby/Desktop/STATIC_ROOT_STUDENT_PORTAL'
+STATIC_ROOT = os.getenv('STATIC_ROOT'),
 
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

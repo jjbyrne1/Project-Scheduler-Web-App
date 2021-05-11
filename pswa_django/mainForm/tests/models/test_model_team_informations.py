@@ -33,7 +33,7 @@ class TeamInformationTestCase(TestCase):
 
     def test_advisor_property_advisorid(self):
         name = "Advisor,B"
-        advisor = Advisor.objects.create(Name=name)
+        advisor = Advisor.objects.create(FullName=name)
         teaminformation = TeamInformation.objects.create(AdvisorID=advisor)
         self.assertEqual(teaminformation.advisorid, advisor.advisorid)
 
@@ -46,4 +46,3 @@ class TeamInformationTestCase(TestCase):
         location = "Room A"
         teaminformation = TeamInformation.objects.create(Location=location)
         self.assertEqual(teaminformation.location, location)
-

@@ -12,7 +12,7 @@ def showtable(request):
     if request.method == "POST":
         return render(request, "tableView.html")
     else:
-        advisor_list = Advisor.objects.order_by('Name')
+        advisor_list = Advisor.objects.order_by('FullName')
         student_list = Student.objects.order_by('FullName')
         teaminfo_list = TeamInformation.objects.order_by('TeamID')
         presentationlog_list = PresentationLog.objects.order_by('TeamID')
@@ -20,7 +20,6 @@ def showtable(request):
                                                   'student_list': student_list,
                                                   'teaminfo_list': teaminfo_list,
                                                   'presentationlog_list': presentationlog_list})
-                                                  #'team_list': team_list})
 
 
 class DateForm(forms.Form):
