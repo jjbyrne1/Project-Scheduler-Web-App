@@ -133,9 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.getenv('STATIC_ROOT')
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.getenv('STATIC_ROOT'),
+# Credit to https://stackoverflow.com/questions/5871730/how-to-upload-a-file-in-django
+# Server path to store files in the computer.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# reference URL for browser to access the files over Http.
+MEDIA_URL = '/media/'
 
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
