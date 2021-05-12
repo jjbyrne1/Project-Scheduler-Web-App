@@ -11,6 +11,7 @@ class PresentationLog(models.Model):
     DesignPresentation_Completed = models.BooleanField(default=False)
     FinalPresentation_Date = models.DateTimeField(null=True, blank=True)
     FinalPresentation_Completed = models.BooleanField(default=False)
+    FinalPresentation_Location = models.CharField(max_length=100, null=True, blank=True)
 
     @property
     def formatted_requirements_presentation_date(self):
@@ -30,4 +31,3 @@ class PresentationLog(models.Model):
 
     def __str__(self):
         return f"Presentation Log for { str(self.TeamID) }"
-
