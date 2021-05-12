@@ -17,17 +17,18 @@
             table {
                 border: 2px solid black;
                 border-collapse: collapse;
+                alignment: left;
             }
 
             th {
                 border: 2px solid black;
-                padding-left: 20px;
-                padding-right: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
                 padding-top: 5px;
                 padding-bottom: 5px;
                 background-color: grey;
                 color: white;
-                font-size: 25px;
+                font-size: 20px;
                 font-family: Verdana;
             }
 
@@ -100,7 +101,8 @@
                     <th>Requirements Presentation</th>
                     <th>Design Presentation</th>
                     <th>Final Presentation</th>
-                    <th>Location</th>
+                    <th>Repository Link</th>
+                    <th>Advertisement Submitted</th>
                 </tr>
                 {% for teaminfo in teaminfo_list %}
                     {% if teaminfo.Students.all %}
@@ -119,14 +121,14 @@
                                         {% if teaminfo.advisorid == advisor.advisorid %}
                                         <!-- change inside the label how you want the advisor to be displayed
                                            options: advisor.firstname, advisor.lastname, or advisor.Name-->
-                                            <label>{{ advisor.Name }}</label>
+                                            <label>{{ advisor.FullName }}</label>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
                             </td>
                             <td>
                                 {% if teaminfo.Topic != None %}
-                                    <label style="text-align: center;padding-left: 20px;padding-right: 20px;">
+                                    <label style="text-align: center;">
                                         {{ teaminfo.Topic }}
                                     </label>
                                 {% endif %}
@@ -172,22 +174,50 @@
                                             {% if presentationlog.FinalPresentation_Completed == True %}
                                                 <label style="color: forestgreen">
                                                     <b>
-                                                        {{ presentationlog.formatted_final_presentation_date }}
+                                                        {{ presentationlog.formatted_final_presentation_date }} at
+                                                        {{ presentationlog.FinalPresentation_Location  }}
                                                     </b>
                                                 </label>
                                             {% elif presentationlog.FinalPresentation_Completed == False %}
                                                 <label style="color:red">
                                                     <b>
-                                                        {{ presentationlog.formatted_final_presentation_date }}
+                                                        {{ presentationlog.formatted_final_presentation_date }} at
+                                                            {% if presentationlog.FinalPresentation_Location %}
+                                                                {{ presentationlog.FinalPresentation_Location  }}
+                                                            {% else %}
+                                                                Undetermined
+                                                            {% endif %}
                                                     </b>
                                                 </label>
                                             {% endif %}
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if teaminfo.location != None %}
-                                            <label> {{ teaminfo.location }} </label>
+                                        {% if teaminfo.GithubRepoLink != None %}
+                                            <a href="{{ teaminfo.GithubRepoLink }}">{{ teaminfo.GithubRepoLink }}</a>
                                         {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if presentationlog.FinalPresentation_Date %}
+                                            {% if teaminfo.ProjectAdvertisement %}
+                                                <label style="color: forestgreen">
+                                                    Yes
+                                                </label>
+                                            {% else %}
+                                                <label style="color: red">
+                                                    No
+                                                </label>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td style="width: 200px">
+                                        <a href="/admin/mainForm/presentationlog/{{ teaminfo.teamid}}/change">
+                                            Edit Presentations
+                                        </a>
+                                        <br>
+                                        <a href="/admin/mainForm/teaminformation/{{ teaminfo.teamid}}/change">
+                                            Edit Team
+                                        </a>
                                     </td>
                                 {% endif %}
                             {% endfor %}
