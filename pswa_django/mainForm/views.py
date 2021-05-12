@@ -1,6 +1,4 @@
-from django.db.models import QuerySet
 from django.shortcuts import render
-from django import forms
 
 from mainForm.models.model_advisors import Advisor
 from mainForm.models.model_team_informations import TeamInformation
@@ -20,8 +18,3 @@ def showtable(request):
                                                   'student_list': student_list,
                                                   'teaminfo_list': teaminfo_list,
                                                   'presentationlog_list': presentationlog_list})
-
-
-class DateForm(forms.Form):
-    #presentationinfo = PresentationLog.objects.all()
-    date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
