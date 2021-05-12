@@ -17,20 +17,10 @@ class PresentationLogAdmin(admin.ModelAdmin):
     # Sorts by a PresentationLog's TeamID field when displaying objects in PresentationLog admin page
     ordering = ('TeamID',)
 
-
-def delete_teams_with_no_students(modeladmin, request, queryset):
-    for team in queryset:
-        if team.Students.count() == 0:
-            modeladmin.message_user(request, f"{team} has {team.Students.count()} students")
-            team.delete()
-
-
 @admin.register(TeamInformation)
 class TeamAdmin(admin.ModelAdmin):
     # Sorts by a TeamInformation's TeamID field when displaying objects in TeamInformation admin page
     ordering = ('TeamID',)
-
-    actions = [delete_teams_with_no_students]
 
     # Used to remove any other occurrences of students on another teams, as students can only be assigned to one team
     def _response_post_save(self, request, obj):
@@ -39,13 +29,21 @@ class TeamAdmin(admin.ModelAdmin):
             # For each user in the changing objects User list
             for student in obj.Students.all():
                 # For each User that was on the team before
+                original_student: Student
                 for original_student in teaminfo.Students.all():
                     if student.FullName == original_student.FullName:
                         t = TeamInformation.objects.get(TeamID=teaminfo.teamid)
                         t.Students.remove(student)
                         t.save()
-                        if t.Students.count() == 0:
+                        if t.Students.count() == 0 and t != obj:
                             TeamInformation.objects.get(TeamID=teaminfo.teamid).delete()
+
+        #uncomment this out if you want teams to be removed if all users are removed after
+        # saving a team information object
+
+        #if obj.Students.count() == 0:
+        #    self.message_user(request, "in")
+        #    obj.delete()
 
         # Credit to https://docs.djangoproject.com/en/1.8/_modules/django/contrib/admin/options/
         opts = self.model._meta
@@ -71,8 +69,6 @@ class CsvImportForm(forms.Form):
 class StudentAdmin(admin.ModelAdmin):
     # Specifies the admin changelist template that we are extending to add an import csv link
     change_list_template = "admin/users_changelist.html"
-
-    #list_display = ['FullName']
 
     # Sorts by a Students FullName field when displaying objects in Student admin page
     ordering = ('FullName',)
@@ -106,33 +102,53 @@ class StudentAdmin(admin.ModelAdmin):
 
     # Executed for deleting multiple students
     def delete_queryset(self, request, queryset):
-        for user in queryset:
-            user.delete()
-
         deleted_teams = 0
-        for team in TeamInformation.objects.all():
-            if team.Students.count() == 0:
-                deleted_teams += 1
-                team.delete()
+        for student in queryset:
+            for team in TeamInformation.objects.all():
+                for team_member in team.Students.all():
+                    if team_member.FullName == student.FullName:
+                        student.delete()
+                        if team.Students.count() > 1:
+                            team.Students.remove(team_member)
+                        else:
+                            team.delete()
+                            deleted_teams += 1
+
+        student_queryset: Student
+        for student_queryset in queryset:
+            student_all: Student
+            for student_all in Student.objects.all():
+                if student_queryset.FullName == student_all.FullName:
+                    student_queryset.delete()
+
 
         if deleted_teams > 0:
             self.message_user(request,
                           f"Deleted {deleted_teams } Teams as they had 0 students after executing "
-                          f"'Deleting Selected Students' action")
+                          f"'Delete Selected Students' action")
 
     # Executed for deleting one student
     def delete_model(self, request, obj):
-        obj.delete()
         deleted_teams = 0
+        obj: Student
         for team in TeamInformation.objects.all():
-            if team.Students.count() == 0:
-                deleted_teams += 1
-                team.delete()
+            for team_member in team.Students.all():
+                if team_member.FullName == obj.FullName:
+                    obj.delete()
+                    if team.Students.count() > 1:
+                        team.Students.remove(team_member)
+                    else:
+                        team.delete()
+                        deleted_teams += 1
+
+        for student_all in Student.objects.all():
+            if obj.FullName == student_all.FullName:
+                obj.delete()
 
         if deleted_teams > 0:
             self.message_user(request,
                               f"Deleted {deleted_teams} Teams as they had 0 students after executing "
-                              f"'Deleting Selected Students' action")
+                              f"'Delete Selected Students' action")
 
     new_student = True
 
