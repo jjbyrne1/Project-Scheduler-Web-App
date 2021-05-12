@@ -9,7 +9,8 @@ class TeamInformation(models.Model):
     Students = models.ManyToManyField(Student, null=True, blank=True)
     AdvisorID = models.ForeignKey(Advisor, on_delete=models.SET_NULL, null=True, blank=True)
     Topic = models.CharField(max_length=50, null=True, blank=True)
-    Location = models.CharField(max_length=100, null=True, blank=True)
+    ProjectAdvertisement = models.FileField(upload_to='advertisements/', null=True, blank=True)
+    GithubRepoLink = models.URLField(max_length=100, null=True, blank=True)
 
     @property
     def listofTeamMembers(self):
