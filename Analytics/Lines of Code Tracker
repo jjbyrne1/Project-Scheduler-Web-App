@@ -1,0 +1,33 @@
+Lines of Code in Application/Frontend (mainForm):
+\models: 84
+    \model_advisors.py: 18
+    \model_presentation_log.py: 25
+    \model_students.py: 5
+    \model_team_information.py: 36
+\templates: 246
+    \admin: 12
+        \advisors_changelist.html: 6
+        \users_changelist.html: 6
+    \csv_form.html: 11
+    \tableView.html: 223
+\tests: 80
+    \models: 80
+        \test_model_advisors: 16
+        \test_model_presentation_logs: 22
+        \test_model_students: 8
+        \test_model_team_information: 34
+\admin.py: 228
+\apps.py: 3
+\urls.py: 5
+\views.py: 17
+
+Total Lines of Code in mainForm: 663
+
+Lines of Code in Backend/Django Project (pswa_django):
+\settings.py: 23
+\urls.py: 10
+\wsgi.py: 4
+
+Total Lines of Code in pswa_django: 37
+
+Total Lines of Code in Project: 700
