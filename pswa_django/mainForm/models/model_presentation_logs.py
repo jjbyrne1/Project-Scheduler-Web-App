@@ -1,10 +1,9 @@
 from django.db import models
-from .model_team_informations import TeamInformation
 
 
 # Presentation Log Model
 class PresentationLog(models.Model):
-    TeamID = models.OneToOneField(to=TeamInformation, on_delete=models.CASCADE)
+    TeamID = models.AutoField(primary_key=True, serialize=False)
     RequirementsPresentation_Date = models.DateField(null=True, blank=True)
     RequirementsPresentation_Completed = models.BooleanField(default=False)
     DesignPresentation_Date = models.DateField(null=True, blank=True)
@@ -27,7 +26,7 @@ class PresentationLog(models.Model):
 
     @property
     def logid(self):
-        return str(self.TeamID_id)
+        return str(self.TeamID)
 
     def __str__(self):
-        return f"Presentation Log for { str(self.TeamID) }"
+        return f"Presentation Log for Team { str(self.TeamID) }"

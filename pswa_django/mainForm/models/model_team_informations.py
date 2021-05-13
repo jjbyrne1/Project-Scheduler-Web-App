@@ -1,16 +1,19 @@
+from django.core.validators import validate_image_file_extension
 from django.db import models
 from .model_advisors import Advisor
 from .model_students import Student
+from .model_presentation_logs import PresentationLog
 
 
 # TeamInformation Model
 class TeamInformation(models.Model):
-    TeamID = models.AutoField(primary_key=True, serialize=False)
+    TeamID = models.OneToOneField(to=PresentationLog, on_delete=models.CASCADE)
     Students = models.ManyToManyField(Student, null=True, blank=True)
     AdvisorID = models.ForeignKey(Advisor, on_delete=models.SET_NULL, null=True, blank=True)
     Topic = models.CharField(max_length=50, null=True, blank=True)
-    ProjectAdvertisement = models.FileField(upload_to='advertisements/', null=True, blank=True)
-    GithubRepoLink = models.URLField(max_length=100, null=True, blank=True)
+    """ Validator makes sure that the file content type is an image extension"""
+    ProjectAdvertisement = models.FileField(upload_to='advertisements/', validators=[validate_image_file_extension], null=True, blank=True)
+    RepoLink = models.URLField(max_length=100, null=True, blank=True)
 
     @property
     def listofTeamMembers(self):
@@ -31,7 +34,7 @@ class TeamInformation(models.Model):
 
     @property
     def teamid(self):
-        return str(self.TeamID)
+        return str(self.TeamID_id)
 
     @property
     def topic(self):
@@ -42,4 +45,4 @@ class TeamInformation(models.Model):
         return self.Location
 
     def __str__(self):
-        return f"Team: {self.teamid} | Team Members: {self.listofTeamMembers}"# | Topic: {self.Topic}"
+        return f"Team: {self.teamid} | Team Members: {self.listofTeamMembers}"

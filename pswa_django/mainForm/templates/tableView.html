@@ -3,23 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>Main Page</title>
-
         <style>
             a {
                 padding-left: 20px;
                 padding-right: 20px;
             }
-
             div {
                 padding: 5px;
             }
-
             table {
                 border: 2px solid black;
                 border-collapse: collapse;
                 alignment: left;
             }
-
             th {
                 border: 2px solid black;
                 padding-left: 10px;
@@ -31,20 +27,17 @@
                 font-size: 20px;
                 font-family: Verdana;
             }
-
             td {
                 border: 2px solid black;
                 padding: 5px;
                 text-align: center;
                 font-family: Verdana;
             }
-
             tr:nth-child(odd) {
                 border: 2px solid black;
                 background-color: lightgray;
             }
         </style>
-
     </head>
     <body>
         <div style="background-color: lightblue; width: 805px">
@@ -185,7 +178,7 @@
                                                             {% if presentationlog.FinalPresentation_Location %}
                                                                 {{ presentationlog.FinalPresentation_Location  }}
                                                             {% else %}
-                                                                Undetermined
+                                                                Undetermined Location
                                                             {% endif %}
                                                     </b>
                                                 </label>
@@ -193,29 +186,29 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if teaminfo.GithubRepoLink != None %}
-                                            <a href="{{ teaminfo.GithubRepoLink }}">{{ teaminfo.GithubRepoLink }}</a>
+                                        {% if teaminfo.RepoLink != None %}
+                                            <a href="{{ teaminfo.GithubRepoLink }}">{{ teaminfo.RepoLink }}</a>
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if presentationlog.FinalPresentation_Date %}
-                                            {% if teaminfo.ProjectAdvertisement %}
-                                                <label style="color: forestgreen">
-                                                    Yes
-                                                </label>
-                                            {% else %}
+                                        {% if teaminfo.ProjectAdvertisement %}
+                                            <a href="/media/{{teaminfo.ProjectAdvertisement}}">
+                                                Click To View
+                                            </a>
+                                        {% else %}
+                                            {% if presentationlog.FinalPresentation_Date %}
                                                 <label style="color: red">
-                                                    No
+                                                    <b> Awaiting Submission </b>
                                                 </label>
                                             {% endif %}
                                         {% endif %}
                                     </td>
                                     <td style="width: 200px">
-                                        <a href="/admin/mainForm/presentationlog/{{ teaminfo.teamid}}/change">
+                                        <!-- <a href="/admin/mainForm/presentationlog/{{ presentationlog.logid}}/change">
                                             Edit Presentations
                                         </a>
-                                        <br>
-                                        <a href="/admin/mainForm/teaminformation/{{ teaminfo.teamid}}/change">
+                                        <br>-->
+                                        <a href="/admin/mainForm/teaminformation/{{ presentationlog.logid}}/change">
                                             Edit Team
                                         </a>
                                     </td>
@@ -226,5 +219,8 @@
                 {% endfor %}
             </table>
         </div>
+        <!-- could find a way to add space for bottom of page so that it doesn't cut off at bottom of table
+         so added white text label to fix it-->
+        <label style="color: white"> more room </label>
     </body>
 </html>
